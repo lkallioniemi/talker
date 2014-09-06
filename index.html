@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>talker</title>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<textarea id="para1" cols="50" rows="30" ></textarea>
+		<script>
+			var pad = document.getElementById("para1");
+			var ticker = 0;
+			var text = "Jukolan talo, eteläisessä Hämeessä, #seisoo erään mäen pohjoisella rinteellä, liki Toukolan kylää. Sen läheisin ympäristö on kivinen tanner, mutta alempana alkaa pellot, joissa, ennenkuin talo oli häviöön mennyt, aaltoili teräinen vilja. #Peltojen alla on niittu, apilaäyräinen, halki-leikkaama monipolvisen ojan; #ja runsaasti antoi se heiniä, ennenkuin joutui laitumeksi kylän karjalle. Muutoin on talolla avaria metsiä, soita ja erämaita, jotka, tämän tilustan ensimmäisen perustajan oivallisen toiminnan kautta, olivat langenneet sille osaksi jo ison jaon käydessä entisinä aikoina. Silloinpa Jukolan isäntä, pitäen enemmän huolta jälkeentulevainsa edusta kuin omasta parhaastansa, otti vastaan osaksensa kulon polttaman metsän ja sai sillä keinolla seitsemän vertaa enemmän kuin toiset naapurinsa. Mutta kaikki kulovalkean jäljet olivat jo kadonneet hänen piiristänsä ja tuuhea metsä kasvanut sijaan. - Ja tämä on niiden seitsemän veljen koto, joiden elämänvaiheita tässä nyt käyn kertoilemaan.";
+			var textarray = text.split('');
+			var buffer = "";
+			var error = false;
+			var errorchar = "";
+			
+			function blink(){
+				ticker++;
+				pad.value = (ticker%2) ? buffer+errorchar+"" : buffer+errorchar+"_";
+			}
+			function write(){
+				var temp = "";
+				if (error) {
+					error = false;
+					errorchar = "";
+				} else {
+					if ((Math.floor(Math.random() * 50) + 1) == 1){
+						error = true;
+						rnd = Math.floor(Math.random() * text.length);
+						errorchar = text.substr(rnd, 1);
+					} else {
+						temp = textarray.shift();
+						if (temp == "#") { temp = "\n"; }
+					}
+				}
+				if (typeof temp != 'undefined') {
+					buffer += temp;
+					pad.value = (ticker%2) ? buffer+errorchar+"" : buffer+errorchar+"_";
+					pause = Math.floor((Math.random() * 150)+100) + ((temp == " ") ? 100 : 0);
+					window.setTimeout(function (){write();}, pause);
+				}
+			}
+			
+			window.setInterval(function(){blink();}, 500);
+			write();
+		</script>
+	</body>
+</html>
